@@ -1,0 +1,38 @@
+language: node_js
+node_js: stable
+
+# Travis-CI Caching
+cache:
+  directories:
+    - node_modules
+
+
+# S: Build Lifecycle
+install:
+  - npm install
+  - npm install ejs
+before_script:
+ # - npm install -g gulp
+
+
+script:
+  - hexo clean
+  - hexo g
+
+
+after_script:
+  - cd ./public
+  - git init
+  - git config user.name "zeoding"
+  - git config user.email "3038600588@qq.com"
+  - git add .
+  - git commit -m "Update docs"
+  - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:master
+# E: Build LifeCycle
+
+branches:
+  only:
+    - hexo
+env:
+ global:
+   - GH_REF: github.com/zeoding/zeoding.github.io.git
